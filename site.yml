@@ -1,4 +1,5 @@
 ---
+- hosts: localhost
 - ec2_vpc:
     state: present
     region: "{{ region }}"
