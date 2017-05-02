@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    - region: us-west-2
+    - region: us-east-2
     - project_name: dfed-demo
     - vpcidr: 10.251.0.0/16
     - subnetcidr: 10.251.1.0/24
@@ -85,6 +85,11 @@
   - ec2:
       key_name: dfed
       group: webservers
+      volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 5
+        delete_on_termination: true
       vpc_subnet_id: "{{ subnets[0] }}"
       instance_type: t2.micro
       image: "{{ find_results.results[0].ami_id }}"
