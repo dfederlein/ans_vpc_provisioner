@@ -5,9 +5,6 @@
   become_user: root
   become_method: sudo
   vars:
-    - https_port: 443
-    - httpd_port: 80
-    - ssh_port: 22
     - repository: https://github.com/dfederlein/webexample.git
     
   tasks:
