@@ -17,9 +17,6 @@
     with_items:
       - httpd
       - firewalld
-    
-  - name: start firewalld 
-    service: name=firewalld state=started enabled=yes 
 
   - name: enable ssh in firewalld
     firewalld: port={{ item }}/tcp permanent=true state=enabled immediate=yes
@@ -27,6 +24,9 @@
       - ssh_port
       - httpd_port
       - https_port
+      
+  - name: start firewalld 
+    service: name=firewalld state=started enabled=yes 
   
   - name: get rid of existing html index page
     file: path=/var/www/html/index.html state=absent
