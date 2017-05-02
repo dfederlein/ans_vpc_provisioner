@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    - region: us-east-2
+    - region: us-west-2
     - project_name: dfed-demo
     - vpcidr: 10.251.0.0/16
     - subnetcidr: 10.251.1.0/24
