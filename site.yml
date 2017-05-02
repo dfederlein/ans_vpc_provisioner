@@ -27,7 +27,7 @@
               gw: igw
     register: network
   - debug: msg="Created VPC named {{ project_name }}-vpc"
-  - debug: msg={{ network.vpc }}
+  - debug: msg={{ network.vpc_id }}
   - debug: msg={{ network.subnet.id }}
   - ec2_group:
       name: webservers
