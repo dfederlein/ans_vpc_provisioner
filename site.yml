@@ -4,6 +4,7 @@
   vars:
     - region: us-west-2
     - project_name: dfed-demo
+    - tag_assign: dfed
     - vpcidr: 10.251.0.0/16
     - subnetcidr: 10.251.1.0/24
     
@@ -76,19 +77,20 @@
   
   - name: search for the latest rhel 7 ami
     ec2_ami_find:
+      owner: "410186602215"
       region: "{{ region }}"
-      name: "CentOS-7.3*"
+      name: "CentOS Linux 7 x86_64 HVM EBS*"
     register: find_results
 
-  - debug: var=find_results.results[0].ami_id
+  - debug: var=find_results
   
   - ec2:
-      key_name: dfed
+      key_name: "{{ tag_assign }}"
       group: webservers
       volumes:
       - device_name: /dev/sda1
         volume_type: gp2
-        volume_size: 5
+        volume_size: 8
         delete_on_termination: true
       vpc_subnet_id: "{{ subnets[0] }}"
       instance_type: t2.micro
@@ -97,10 +99,10 @@
       region: "{{ region }}"
       exact_count: 1
       count_tag:
-        Count: dfed-demo
+        Count: "{{ project_name }}"
       instance_tags:
-        Name: dfed
-        Count: dfed-demo
+        Name: "{{ tag_assign }}"
+        Count: "{{ project_name }}"
       assign_public_ip: true
     register: ec2
           
