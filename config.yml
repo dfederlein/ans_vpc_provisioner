@@ -1,6 +1,8 @@
 ---
 - hosts: all
   gather_facts: false
+  become: true
+  become_user: root
   vars:
     - https_port: 443
     - httpd_port: 80
@@ -10,6 +12,7 @@
   tasks:
   
   - local_action:  wait_for port=22 host="{{ ansible_ssh_host | default(inventory_hostname) }}" search_regex=OpenSSH delay=10
+    sudo: false
     
   - name: install epel
     yum: name=epel-release state=present
