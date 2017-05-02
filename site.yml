@@ -28,7 +28,7 @@
     register: network
   - debug: msg="Created VPC named {{ project_name }}-vpc"
   - debug: msg={{ network }}
-  - debug: msg={{ network.subnet.id }}
+  - debug: msg={{ network.subnets.id }}
   - ec2_group:
       name: webservers
       region: "{{ region }}"
