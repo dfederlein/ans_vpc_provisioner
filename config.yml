@@ -2,26 +2,31 @@
 - hosts: all
   gather_facts: false
   vars:
+    - https_port: 443
     - httpd_port: 80
     - ssh_port: 22
     - repository: https://github.com/dfederlein/webexample.git
     
   tasks:
-  
-  - name: start firewalld 
-    service: name=firewalld state=started enabled=yes 
-
-  - name: enable ssh in firewalld
-    firewalld: port={{ ssh_port }}/tcp permanent=true state=enabled immediate=yes
     
   - name: install epel
     yum: name=epel-release state=present
     
-  - name: install apache
-    yum: name=httpd state=present
+  - name: install useful services
+    yum: name={{ item }} state=present
+    with_items:
+      - httpd
+      - firewalld
+    
+  - name: start firewalld 
+    service: name=firewalld state=started enabled=yes 
 
-  - name: insert firewalld rule for httpd
-    firewalld: port={{ httpd_port }}/tcp permanent=true state=enabled immediate=yes
+  - name: enable ssh in firewalld
+    firewalld: port={{ item }}/tcp permanent=true state=enabled immediate=yes
+    with_items: 
+      - ssh_port
+      - httpd_port
+      - https_port
   
   - name: get rid of existing html index page
     file: path=/var/www/html/index.html state=absent

@@ -104,11 +104,10 @@
       assign_public_ip: true
     register: ec2
       
-  - debug: var=ec2
+  - debug: var=ec2.instances.[0].public_ip
   
   - name: Wait for instances to listen on port 22
     wait_for:
       state: started
-      host: "{{ item.public_ip }}"
+      host: "{{ ec2.instances.[0].public_ip }}"
       port: 22
-    with_items: ec2.instances
