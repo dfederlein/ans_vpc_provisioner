@@ -52,7 +52,7 @@
   - ec2:
       key_name: dfed
       group_id: "{{ web_sg.group_id }}"
-      vpc_subnet_id: "{{ network.vpc_subnet_id }}"
+      vpc_subnet_id: "{{ network.subnet.id }}"
       instance_type: t2.micro
       image: ami-6a2d760f
       wait: true
