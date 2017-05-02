@@ -22,6 +22,9 @@
 
   - name: insert firewalld rule for httpd
     firewalld: port={{ httpd_port }}/tcp permanent=true state=enabled immediate=yes
+  
+  - name: get rid of existing html index page
+    file: path=/var/www/html/index.html state=absent
 
   - name: copy the code from repository
     git: repo={{ repository }} dest=/var/www/html/
