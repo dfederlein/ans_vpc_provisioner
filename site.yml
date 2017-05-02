@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    - region: us-west-2
+    - region: us-east-2
     - project_name: dfed-demo
     - vpcidr: 10.251.0.0/16
     - subnetcidr: 10.251.1.0/24
@@ -74,18 +74,26 @@
     register: web_sg
   - debug: msg=Created VPC security group called webservers, ID {{ web_sg.group_id }} to take web traffic
   
-  - ec2:
-      key_name: dfed
-      group: webservers
-      vpc_subnet_id: "{{ subnets[0] }}"
-      instance_type: t2.micro
-      image: ami-6a2d760f
-      wait: true
-      region: us-east-2
-      exact_count: 1
-      count_tag:
-        Count: dfed-demo
-      instance_tags:
-        Name: dfed
-        Count: dfed-demo
-        register: ec2
+  - name: search for the latest rhel 7 ami
+    ec2_ami_find:
+      region: "{{ region }}"
+      name: "CentOS-7.3*"
+    register: find_results
+
+  - debug: var=find_results
+  
+#  - ec2:
+#      key_name: dfed
+#      group: webservers
+#      vpc_subnet_id: "{{ subnets[0] }}"
+#      instance_type: t2.micro
+#      image: "{{ searchami }}"
+#      wait: true
+#      region: us-east-2
+#      exact_count: 1
+#      count_tag:
+#        Count: dfed-demo
+#      instance_tags:
+#        Name: dfed
+#        Count: dfed-demo
+#        register: ec2
