@@ -27,7 +27,7 @@
               gw: igw
     register: network
   - debug: msg="Created VPC named {{ project_name }}-vpc"
-  - debug: msg={{ network }}
+  - debug: msg={{ network.vpc_id }}
   - debug: msg={{ network.subnets.id }}
   - ec2_group:
       name: webservers
@@ -52,7 +52,7 @@
   - ec2:
       key_name: dfed
       group_id: "{{ web_sg.group_id }}"
-      vpc_subnet_id: "{{ network.subnet.id }}"
+      vpc_subnet_id: "{{ network.subnets.id }}"
       instance_type: t2.micro
       image: ami-6a2d760f
       wait: true
