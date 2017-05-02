@@ -2,19 +2,21 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    - region: us-east-2
+    - region: us-west-2
     - project_name: dfed-demo
-
+    - vpcidr: 10.251.0.0/16
+    - subnetcidr: 10.251.1.0/24
+    
   tasks:
   - ec2_vpc:
       state: present
       region: "{{ region }}"
-      cidr_block: 10.250.0.0/16
+      cidr_block: "{{ vpcidr }}"
       resource_tags:
         tool: ansible
         Name: "{{ project_name }}-vpc"
       subnets:
-        - cidr: 10.250.1.0/24
+        - cidr: "{{ subnetcidr }}"
           az: "{{ region }}a"
           resource_tags:
             tool: ansible
@@ -22,7 +24,7 @@
       internet_gateway: True
       route_tables:
         - subnets:
-           - 10.250.1.0/24
+           - "{{ subnetcidr }}"
           routes:
             - dest: 0.0.0.0/0
               gw: igw
@@ -54,7 +56,7 @@
   - ec2_group:
       name: webservers
       region: "{{ region }}"
-      description: Security group to allow public HTTP/HTTPS traffic
+      description: SSH and HTTP/HTTPS 
       vpc_id: "{{ vpc_id }}"
       rules:
         - proto: tcp
