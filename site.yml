@@ -102,4 +102,5 @@
         Name: dfed
         Count: dfed-demo
       assign_public_ip: true
-      
+    register: ec2
+          

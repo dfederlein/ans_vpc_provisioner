@@ -12,7 +12,7 @@
     
   tasks:
   
-  - local_action:  wait_for port=22 host="{{ ansible_ssh_host | default(inventory_hostname) }}" search_regex=OpenSSH delay=10
+  - local_action:  wait_for port=22 host="{{ ansible_ssh_host | default(inventory_hostname) }}" search_regex=OpenSSH delay=300
     become: false
     
   - name: install epel
