@@ -4,6 +4,7 @@
   vars:
     - region: us-east-2
     - project_name: dfed-demo
+
   tasks:
   - ec2_vpc:
       state: present
@@ -25,14 +26,36 @@
           routes:
             - dest: 0.0.0.0/0
               gw: igw
-    register: network
+              
   - debug: msg="Created VPC named {{ project_name }}-vpc"
+
+  - ec2_vpc_net_facts:
+      region: "{{ region }}"
+      filters:
+        "tag:Name": "{{ project_name }}-vpc"
+    register: network
+
+  - debug: msg="{{ network }}"
+    
+  - set_fact:
+      vpc_id: "{{ network.vpcs[0].id }}"
+
+  - ec2_vpc_subnet_facts:
+      region: "{{ region }}"
+      filters:
+        vpc-id: "{{ vpc_id }}"
+    register: vpc_nets
+    
+  - set_fact:
+      subnets: "{{ vpc_nets.subnets | map(attribute='id') | list }}"
+ 
+  - debug: var=subnets[0]
       
   - ec2_group:
       name: webservers
       region: "{{ region }}"
       description: Security group to allow public HTTP/HTTPS traffic
-      vpc_id: "{{ network.vpc_id }}"
+      vpc_id: "{{ vpc_id }}"
       rules:
         - proto: tcp
           from_port: 22
@@ -47,10 +70,12 @@
           to_port: 443
           cidr_ip: 0.0.0.0/0
     register: web_sg
-    
+  - debug: msg=Created VPC security group called webservers, ID {{ web_sg.group_id }} to take web traffic
+  
   - ec2:
       key_name: dfed
-      group_id: sg-c46134ad
+      group: webservers
+      vpc_subnet_id: "{{ subnets[0] }}"
       instance_type: t2.micro
       image: ami-6a2d760f
       wait: true
