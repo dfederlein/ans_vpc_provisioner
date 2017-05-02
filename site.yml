@@ -50,7 +50,7 @@
     
   - ec2:
       key_name: dfed
-      group_id: subnet-e533a88c
+      group_id: sg-c46134ad
       instance_type: t2.micro
       image: ami-6a2d760f
       wait: true
