@@ -94,7 +94,7 @@
       instance_type: t2.micro
       image: "{{ find_results.results[0].ami_id }}"
       wait: true
-      region: us-east-2
+      region: "{{ region }}"
       exact_count: 1
       count_tag:
         Count: dfed-demo
