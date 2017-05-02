@@ -27,8 +27,7 @@
               gw: igw
     register: network
   - debug: msg="Created VPC named {{ project_name }}-vpc"
-  - debug: msg={{ network.vpc_id }}
-  - debug: msg={{ network.subnets.id }}
+      
   - ec2_group:
       name: webservers
       region: "{{ region }}"
@@ -48,11 +47,10 @@
           to_port: 443
           cidr_ip: 0.0.0.0/0
     register: web_sg
-  - debug: msg=Created VPC security group called webservers, ID {{ web_sg.group_id }} to take web traffic
+    
   - ec2:
       key_name: dfed
-      group_id: "{{ web_sg.group_id }}"
-      vpc_subnet_id: "{{ network.subnets.id }}"
+      group_id: subnet-e533a88c
       instance_type: t2.micro
       image: ami-6a2d760f
       wait: true
