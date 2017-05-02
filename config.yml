@@ -28,7 +28,7 @@
     file: path=/var/www/html/index.html state=absent
 
   - name: copy the code from repository
-    git: repo={{ repository }} dest=/var/www/html/
+    git: repo={{ repository }} dest=/var/www/html/ force=yes
 
   - name: start and enable apache
     service: name=httpd state=started enabled=yes
