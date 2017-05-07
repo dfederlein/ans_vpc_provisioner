@@ -2,11 +2,11 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    - region: us-west-2
+    - region: us-east-2
     - project_name: dfed-demo
     - tag_assign: dfed
-    - vpcidr: 10.251.0.0/16
-    - subnetcidr: 10.251.1.0/24
+    - vpcidr: 10.245.0.0/16
+    - subnetcidr: 10.245.1.0/24
     
   tasks:
   - ec2_vpc:
