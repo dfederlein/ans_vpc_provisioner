@@ -5,6 +5,7 @@
     - region: us-east-2
     - project_name: dfed-demo
     - tag_assign: dfed
+    - key_assign: dfed-demo
     - vpcidr: 10.245.0.0/16
     - subnetcidr: 10.245.1.0/24
     
@@ -85,7 +86,7 @@
   - debug: var=find_results
   
   - ec2:
-      key_name: "{{ tag_assign }}"
+      key_name: "{{ key_assign }}"
       group: webservers
       volumes:
       - device_name: /dev/sda1
